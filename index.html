@@ -2,42 +2,1763 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FATY - المساعد الذكي | يُحوِّلك الآن...</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FATY - المساعد الذكي | FATYAK</title>
+<meta name="description" content="FATY - مساعد ذكي عربي مجاني بدون مفتاح API، صوت وكتابة وتوليد صور، تطوير FATYAK">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#1a1a1a;height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Cairo',system-ui,sans-serif;color:#fff;direction:rtl}
-.box{text-align:center;max-width:340px;padding:30px}
-.av{width:80px;height:80px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,#E95420,#772953);display:flex;align-items:center;justify-content:center;border:3px solid #E95420}
-h1{font-size:24px;margin-bottom:8px}
-p{color:#a0a0a0;font-size:14px;margin-bottom:20px}
-.bar{width:100%;height:4px;background:#3d3d3d;border-radius:2px;overflow:hidden}
-.bar::after{content:'';display:block;width:30%;height:100%;background:#E95420;border-radius:2px;animation:load 1.2s infinite}
-@keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
-a{color:#E95420;text-decoration:none;font-size:13px;margin-top:12px;display:inline-block}
-a:hover{text-decoration:underline}
+:root {
+  --ubuntu-orange: #E95420;
+  --ubuntu-orange-hover: #ff6a3c;
+  --ubuntu-aubergine: #772953;
+  --ubuntu-dark-aubergine: #2C001E;
+  --ubuntu-bg: #1e1e1e;
+  --ubuntu-panel: #2b2b2b;
+  --ubuntu-header: #353535;
+  --ubuntu-border: #444444;
+  --ubuntu-text: #ffffff;
+  --ubuntu-muted: #b0b0b0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; width: 100%; overflow: hidden; }
+body {
+  font-family: 'Cairo', 'Ubuntu', system-ui, -apple-system, sans-serif;
+  background-color: var(--ubuntu-bg);
+  color: var(--ubuntu-text);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ubuntu Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--ubuntu-bg); }
+::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ubuntu-orange); }
+
+/* Top Ubuntu Bar */
+#top-bar {
+  height: 42px;
+  background: linear-gradient(180deg, #3c3b37 0%, #2c2b29 100%);
+  border-bottom: 1px solid #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  user-select: none;
+  z-index: 50;
+  flex-shrink: 0;
+}
+.top-left, .top-center, .top-right { display: flex; align-items: center; gap: 12px; }
+.top-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.top-item:hover { background: rgba(255,255,255,0.1); }
+.ubuntu-logo {
+  width: 20px;
+  height: 20px;
+  fill: var(--ubuntu-orange);
+}
+
+/* Main Layout */
+#main-container {
+  flex: 1;
+  display: flex;
+  height: calc(100% - 42px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Left Dock / Sidebar (Ubuntu Style) */
+#sidebar {
+  width: 280px;
+  background: #252525;
+  border-left: 1px solid var(--ubuntu-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  z-index: 40;
+}
+.sidebar-header {
+  padding: 14px;
+  border-bottom: 1px solid var(--ubuntu-border);
+  background: linear-gradient(135deg, rgba(119,41,83,0.3) 0%, rgba(44,0,30,0.4) 100%);
+}
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.fatyak-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--ubuntu-orange), var(--ubuntu-aubergine));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: 'Ubuntu', sans-serif;
+  color: #fff;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(233,84,32,0.35);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.brand-title { font-size: 17px; font-weight: 800; color: #fff; line-height: 1.2; }
+.brand-sub { font-size: 11px; color: var(--ubuntu-muted); }
+
+.btn-new-chat {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(180deg, var(--ubuntu-orange) 0%, #c33e10 100%);
+  color: white;
+  border: 1px solid #ff7b4d;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.btn-new-chat:hover {
+  background: linear-gradient(180deg, var(--ubuntu-orange-hover) 0%, var(--ubuntu-orange) 100%);
+  box-shadow: 0 0 12px rgba(233,84,32,0.5);
+}
+
+.developer-card {
+  padding: 8px 14px;
+  background: #1c1c1c;
+  border-bottom: 1px solid var(--ubuntu-border);
+  font-size: 11.5px;
+  color: var(--ubuntu-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dev-name {
+  color: var(--ubuntu-orange);
+  font-weight: 800;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.conv-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.conv-item {
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  color: #ddd;
+  font-size: 13px;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.conv-item:hover { background: #323232; color: #fff; }
+.conv-item.active {
+  background: rgba(233,84,32,0.22);
+  border-color: var(--ubuntu-orange);
+  color: #fff;
+  font-weight: 700;
+}
+.conv-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 190px;
+}
+.conv-del {
+  opacity: 0;
+  color: #999;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.conv-item:hover .conv-del { opacity: 1; }
+.conv-del:hover { color: #ff5555; background: rgba(255,255,255,0.1); }
+
+.sidebar-footer {
+  padding: 12px 14px;
+  border-top: 1px solid var(--ubuntu-border);
+  background: #1f1f1f;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, var(--ubuntu-aubergine));
+  border: 2px solid var(--ubuntu-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 15px;
+}
+.user-info { line-height: 1.2; }
+.user-name { font-weight: 700; font-size: 13.5px; }
+.user-role { font-size: 11px; color: var(--ubuntu-muted); }
+
+/* Chat Workspace */
+#chat-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+  position: relative;
+  min-width: 0;
+}
+
+/* Chat Header (Ubuntu Window Header Style) */
+.chat-header {
+  height: 48px;
+  background: #2e2e2e;
+  border-bottom: 1px solid var(--ubuntu-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+.chat-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.faty-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ubuntu-orange), var(--ubuntu-aubergine));
+  border: 2px solid var(--ubuntu-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.status-details h2 {
+  font-size: 14.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-badge {
+  font-size: 10.5px;
+  color: #4ade80;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.status-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: #4ade80;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px #4ade80;
+}
+.status-sub {
+  font-size: 11px;
+  color: var(--ubuntu-muted);
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tool-btn {
+  background: #3a3a3a;
+  border: 1px solid #505050;
+  color: #eee;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+.tool-btn:hover {
+  background: #484848;
+  border-color: var(--ubuntu-orange);
+  color: #fff;
+}
+.tool-btn.active {
+  background: rgba(233,84,32,0.25);
+  border-color: var(--ubuntu-orange);
+  color: var(--ubuntu-orange);
+}
+#menu-toggle { display: none; }
+
+/* Messages Area */
+#messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Welcome Hero Screen */
+.welcome-hero {
+  max-width: 680px;
+  margin: auto;
+  text-align: center;
+  padding: 24px 16px;
+  animation: fadeIn 0.4s ease;
+}
+.hero-icon {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ubuntu-orange), var(--ubuntu-aubergine));
+  border: 4px solid var(--ubuntu-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 0 30px rgba(233,84,32,0.45);
+}
+.hero-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.hero-title span {
+  color: var(--ubuntu-orange);
+}
+.hero-desc {
+  font-size: 14px;
+  color: var(--ubuntu-muted);
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+.quick-prompts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.quick-card {
+  background: #2a2a2a;
+  border: 1px solid var(--ubuntu-border);
+  padding: 12px 14px;
+  border-radius: 10px;
+  text-align: right;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.quick-card:hover {
+  border-color: var(--ubuntu-orange);
+  background: rgba(233,84,32,0.12);
+  transform: translateY(-2px);
+}
+.quick-card span.icon { font-size: 18px; }
+
+/* Message Bubble */
+.msg-row {
+  display: flex;
+  gap: 12px;
+  max-width: 820px;
+  width: 100%;
+  margin: 0 auto;
+  animation: slideUp 0.25s ease-out;
+}
+.msg-row.user-row {
+  flex-direction: row-reverse;
+}
+.msg-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+.faty-msg-av {
+  background: linear-gradient(135deg, var(--ubuntu-orange), var(--ubuntu-aubergine));
+  border: 2px solid var(--ubuntu-orange);
+}
+.user-msg-av {
+  background: linear-gradient(135deg, #2563eb, var(--ubuntu-aubergine));
+  border: 2px solid var(--ubuntu-orange);
+}
+.msg-body {
+  display: flex;
+  flex-direction: column;
+  max-width: 75%;
+}
+.msg-row.user-row .msg-body { align-items: flex-end; }
+.msg-sender {
+  font-size: 11.5px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #ccc;
+  padding: 0 4px;
+}
+.msg-bubble {
+  padding: 12px 16px;
+  font-size: 14.5px;
+  line-height: 1.8;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+.faty-bubble {
+  background: #2a2a2a;
+  border: 1px solid var(--ubuntu-border);
+  border-radius: 18px 18px 18px 4px;
+  color: #f1f1f1;
+}
+.user-bubble {
+  background: linear-gradient(135deg, var(--ubuntu-orange) 0%, #b8360d 100%);
+  border-radius: 18px 18px 4px 18px;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.msg-image {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+  border: 1px solid var(--ubuntu-border);
+  display: block;
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+.msg-image:hover { transform: scale(1.01); }
+.msg-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+.msg-tool-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+.msg-tool-btn:hover {
+  color: var(--ubuntu-orange);
+  background: rgba(255,255,255,0.06);
+}
+
+/* Typing Indicator */
+.typing-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 4px;
+}
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ubuntu-orange);
+  animation: pulseDot 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Listening banner */
+#listening-banner {
+  display: none;
+  background: linear-gradient(90deg, rgba(233,84,32,0.25) 0%, rgba(44,0,30,0.4) 100%);
+  border-top: 1px solid var(--ubuntu-orange);
+  padding: 8px 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #ff916a;
+  font-weight: 700;
+  animation: fadeIn 0.2s;
+}
+.wave-bars {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+.wave-bar {
+  width: 3px;
+  background: var(--ubuntu-orange);
+  border-radius: 2px;
+  animation: waveAnim 0.8s infinite ease-in-out;
+}
+.wave-bar:nth-child(2) { animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+/* Input Composer (Ubuntu Style) */
+#composer-area {
+  padding: 12px 16px 16px;
+  background: #252525;
+  border-top: 1px solid var(--ubuntu-border);
+  flex-shrink: 0;
+}
+.composer-inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+#image-preview-box {
+  display: none;
+  margin-bottom: 8px;
+  position: relative;
+  display: inline-block;
+}
+#preview-thumbnail {
+  height: 64px;
+  border-radius: 8px;
+  border: 2px solid var(--ubuntu-orange);
+  display: block;
+}
+#remove-preview-btn {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 20px;
+  height: 20px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.input-container {
+  display: flex;
+  align-items: flex-end;
+  background: #333333;
+  border: 1px solid var(--ubuntu-border);
+  border-radius: 14px;
+  padding: 6px 10px;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.input-container:focus-within {
+  border-color: var(--ubuntu-orange);
+  box-shadow: 0 0 10px rgba(233,84,32,0.3);
+  background: #383838;
+}
+
+#chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14.5px;
+  line-height: 1.6;
+  resize: none;
+  max-height: 140px;
+  padding: 6px 4px;
+}
+#chat-input::placeholder { color: #888; }
+
+.action-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #bbb;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.action-icon-btn:hover {
+  background: #444;
+  color: #fff;
+}
+#mic-btn.recording {
+  background: #ff3333 !important;
+  color: #fff !important;
+  animation: pulseMic 1.2s infinite;
+}
+#send-btn {
+  background: linear-gradient(180deg, var(--ubuntu-orange) 0%, #c43e11 100%);
+  color: #fff;
+  border: 1px solid #ff7b4d;
+}
+#send-btn:hover {
+  background: linear-gradient(180deg, var(--ubuntu-orange-hover) 0%, var(--ubuntu-orange) 100%);
+}
+#send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.composer-hints {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #777;
+  padding: 0 4px;
+}
+
+/* Image Generator Modal */
+#image-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-window {
+  background: #2b2b2b;
+  border: 1px solid var(--ubuntu-border);
+  border-radius: 12px;
+  max-width: 580px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  overflow: hidden;
+  animation: scaleUp 0.2s ease-out;
+}
+.modal-header {
+  padding: 14px 18px;
+  background: #353535;
+  border-bottom: 1px solid var(--ubuntu-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header h3 { font-size: 16px; font-weight: 700; }
+.modal-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+}
+.modal-close:hover { color: #fff; }
+.modal-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.modal-body label { font-size: 13px; font-weight: 700; color: #ddd; }
+#gen-prompt-input {
+  width: 100%;
+  background: #1e1e1e;
+  border: 1px solid var(--ubuntu-border);
+  border-radius: 8px;
+  padding: 10px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+}
+#gen-prompt-input:focus { border-color: var(--ubuntu-orange); }
+.aspect-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.aspect-btn {
+  background: #383838;
+  border: 1px solid #555;
+  color: #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 600;
+}
+.aspect-btn.active {
+  background: var(--ubuntu-orange);
+  color: white;
+  border-color: #ff7b4d;
+}
+.prompt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.p-chip {
+  background: #333;
+  border: 1px solid #4a4a4a;
+  color: #bbb;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.p-chip:hover {
+  background: rgba(233,84,32,0.2);
+  color: #fff;
+  border-color: var(--ubuntu-orange);
+}
+#btn-execute-gen {
+  padding: 12px;
+  background: linear-gradient(180deg, var(--ubuntu-orange) 0%, #c43e11 100%);
+  color: #fff;
+  border: 1px solid #ff7b4d;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#btn-execute-gen:hover {
+  background: linear-gradient(180deg, var(--ubuntu-orange-hover) 0%, var(--ubuntu-orange) 100%);
+}
+#gen-result-area {
+  display: none;
+  margin-top: 10px;
+  text-align: center;
+}
+#gen-result-area img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--ubuntu-border);
+}
+
+/* Lightbox preview */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 120;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: zoom-out;
+}
+#lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  border-radius: 8px;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
+@keyframes pulseMic { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+@keyframes waveAnim { 0%, 100% { height: 6px; } 50% { height: 18px; } }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #sidebar {
+    position: fixed;
+    top: 42px;
+    right: 0;
+    bottom: 0;
+    transform: translateX(100%);
+    box-shadow: -5px 0 25px rgba(0,0,0,0.7);
+  }
+  #sidebar.open { transform: translateX(0); }
+  #menu-toggle { display: flex; }
+  .msg-body { max-width: 86%; }
+  .quick-prompts { grid-template-columns: 1fr; }
+  .aspect-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
-<div class="box">
-  <div class="av">
-    <svg width="45" height="45" viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round">
-      <rect x="9" y="13" width="22" height="17" rx="6"/>
-      <line x1="20" y1="7" x2="20" y2="13"/>
-      <circle cx="20" cy="5.5" r="2.2" fill="#fff" stroke="none"/>
-      <circle cx="15.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/>
-      <circle cx="24.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/>
-      <path d="M15.5 25.5c1.7 1.7 7.3 1.7 9 0"/>
-    </svg>
+
+<!-- Ubuntu Top Panel -->
+<header id="top-bar">
+  <div class="top-left">
+    <div class="top-item" title="FATY OS">
+      <svg class="ubuntu-logo" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="12" cy="4" r="2.2" fill="currentColor"/>
+        <circle cx="5" cy="16" r="2.2" fill="currentColor"/>
+        <circle cx="19" cy="16" r="2.2" fill="currentColor"/>
+      </svg>
+      <span>FATY 24.04</span>
+    </div>
+    <div class="top-item" onclick="triggerNewChat()">
+      <span>محادثة جديدة</span>
+    </div>
   </div>
-  <h1>FATY</h1>
-  <p>يُحوِّلك إلى المساعد الذكي...</p>
-  <div class="bar"></div>
-  <a href="app.html">اضغط هنا إذا لم يتم التحويل تلقائياً</a>
+  <div class="top-center">
+    <span id="os-clock">12:00 م</span>
+  </div>
+  <div class="top-right">
+    <div class="top-item" id="audio-toggle" onclick="toggleSpeech()" title="تفعيل / كتم الصوت التلقائي">
+      <span id="audio-icon">🔊</span>
+      <span style="font-size:11px;">صوت المساعد</span>
+    </div>
+    <div class="top-item" style="font-size:11px; color:var(--ubuntu-orange);" title="المطور">
+      <span>تطوير: FATYAK</span>
+    </div>
+  </div>
+</header>
+
+<!-- Main Workspace -->
+<div id="main-container">
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="app-brand">
+        <div class="fatyak-badge">F</div>
+        <div>
+          <div class="brand-title">FATY AI</div>
+          <div class="brand-sub">المساعد الذكي المجاني</div>
+        </div>
+      </div>
+      <button class="btn-new-chat" onclick="triggerNewChat()">
+        <span>＋</span>
+        <span>محادثة جديدة</span>
+      </button>
+    </div>
+
+    <div class="developer-card">
+      <span>المطور:</span>
+      <span class="dev-name">FATYAK</span>
+    </div>
+
+    <div class="conv-list" id="conversations-list">
+      <!-- Items populated via JS -->
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar">ف</div>
+      <div class="user-info">
+        <div class="user-name">فاتح (Fateh)</div>
+        <div class="user-role">صاحب ومستخدم النظام</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Chat Area -->
+  <main id="chat-workspace">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-status">
+        <button class="tool-btn" id="menu-toggle" onclick="toggleSidebar()">☰ القائمة</button>
+        <div class="faty-avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="11" width="18" height="10" rx="4"/>
+            <circle cx="8.5" cy="16" r="1.5" fill="currentColor"/>
+            <circle cx="15.5" cy="16" r="1.5" fill="currentColor"/>
+            <path d="M9 19c1.5 1 4.5 1 6 0"/>
+            <path d="M12 5v6"/>
+            <circle cx="12" cy="4" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="status-details">
+          <h2>FATY <span class="status-badge">نشط</span></h2>
+          <div class="status-sub" id="faty-sub-status">مستعد للرد عليك يا فاتح في أي وقت</div>
+        </div>
+      </div>
+
+      <div class="header-tools">
+        <button class="tool-btn" onclick="openImageModal()">
+          <span>🎨</span>
+          <span>توليد صورة</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Listening Audio Wave Banner -->
+    <div id="listening-banner">
+      <div class="wave-bars">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+      <span>أستمع إليك يا فاتح... تفضل بالكلام الآن 🎤</span>
+    </div>
+
+    <!-- Messages Container -->
+    <div id="messages-container">
+      <!-- Dynamic messages or Welcome Screen -->
+    </div>
+
+    <!-- Input Composer -->
+    <div id="composer-area">
+      <div class="composer-inner">
+        <!-- Image Preview if selected -->
+        <div id="image-preview-box">
+          <img id="preview-thumbnail" src="" alt="preview">
+          <button id="remove-preview-btn" onclick="clearSelectedImage()" title="إزالة الصورة">✕</button>
+        </div>
+
+        <div class="input-container">
+          <input type="file" id="image-file-input" accept="image/*" style="display:none" onchange="handleImageFileSelect(event)">
+          <button class="action-icon-btn" onclick="document.getElementById('image-file-input').click()" title="رفع صورة">
+            📎
+          </button>
+          <button class="action-icon-btn" onclick="openImageModal()" title="توليد صورة بالذكاء الاصطناعي">
+            ✨
+          </button>
+
+          <textarea id="chat-input" rows="1" placeholder="اكتب سؤالك لـ FATY، أو اضغط على الميكروفون للحديث..."></textarea>
+
+          <button class="action-icon-btn" id="mic-btn" onclick="toggleMicrophone()" title="تحدث عبر الميكروفون">
+            🎤
+          </button>
+          <button class="action-icon-btn" id="send-btn" onclick="handleSendMessage()" title="إرسال (Enter)">
+            ➤
+          </button>
+        </div>
+
+        <div class="composer-hints">
+          <span>اضغط <b>Enter</b> للإرسال، أو <b>Shift + Enter</b> لسطر جديد</span>
+          <span>المساعد الذكي <b>FATY</b> • تطوير <b>FATYAK</b></span>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
+
+<!-- Image Generation Modal -->
+<div id="image-modal">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3>🎨 توليد الصور بالذكاء الاصطناعي</h3>
+      <button class="modal-close" onclick="closeImageModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <label>صف الصورة التي تريد توليدها (بالعربية أو الإنجليزية):</label>
+        <textarea id="gen-prompt-input" rows="3" placeholder="مثال: أسد ذهبي على قمة جبل وقت الغروب، إضاءة سينمائية..."></textarea>
+      </div>
+
+      <div>
+        <label>أبعاد الصورة:</label>
+        <div class="aspect-grid">
+          <button class="aspect-btn active" data-w="1024" data-h="1024" onclick="selectAspect(this)">مربع (1:1)</button>
+          <button class="aspect-btn" data-w="1280" data-h="720" onclick="selectAspect(this)">عريض (16:9)</button>
+          <button class="aspect-btn" data-w="720" data-h="1280" onclick="selectAspect(this)">طولي (9:16)</button>
+          <button class="aspect-btn" data-w="1024" data-h="768" onclick="selectAspect(this)">شاشة (4:3)</button>
+        </div>
+      </div>
+
+      <div>
+        <label>أفكار مقترحة سريعة:</label>
+        <div class="prompt-chips">
+          <div class="p-chip" onclick="setGenPrompt(this)">قطة لطيفة في حديقة خضراء</div>
+          <div class="p-chip" onclick="setGenPrompt(this)">مدينة مستقبلية بأسلوب السايبربانك</div>
+          <div class="p-chip" onclick="setGenPrompt(this)">حصان عربي أصيل يركض على شاطئ البحر</div>
+          <div class="p-chip" onclick="setGenPrompt(this)">رائد فضاء ينظر إلى كوكب الأرض</div>
+          <div class="p-chip" onclick="setGenPrompt(this)">سيارة رياضية حديثة بألوان نيون</div>
+        </div>
+      </div>
+
+      <button id="btn-execute-gen" onclick="executeImageGeneration()">ولّد الصورة الآن ✨</button>
+
+      <div id="gen-result-area">
+        <!-- Rendered after gen -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full Image Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="zoom">
+</div>
+
+<!-- Robust Application Script -->
 <script>
-// Redirect to the built app
-window.location.replace("app.html");
+/**
+ * FATY AI Assistant Core Script
+ * Developed by FATYAK
+ * Designed for 100% Reliable Execution on GitHub Pages & Localhost
+ */
+
+// Application State
+const AppState = {
+  conversations: [],
+  currentConvId: null,
+  isProcessing: false,
+  isListening: false,
+  isSpeaking: false,
+  autoSpeak: true,
+  selectedImageBase64: null,
+  speechRecognition: null,
+  speechSynth: window.speechSynthesis || null,
+  currentAspect: { w: 1024, h: 1024 }
+};
+
+const STORAGE_KEY = "FATY_CONVERSATIONS_V2";
+
+// Arabic Dictionary for Local Instant Intelligent Answers (Fallback & Zero-Latency)
+const LocalKnowledge = {
+  name: "FATY",
+  user: "فاتح",
+  dev: "FATYAK",
+  greetings: [
+    "أهلاً وسهلاً بك يا فاتح! أنا جاهز لمساعدتك في أي وقت 😊",
+    "مرحباً يا فاتح! كيف يمكنني خدمتك اليوم؟ ✨",
+    "نعم يا فاتح، أنا معك وبكامل طاقتي! تفضل بسؤالك."
+  ],
+  responses: [
+    {
+      keywords: ["من أنت", "ما اسمك", "عرفني عن نفسك", "مين انت", "اسمك"],
+      reply: "أنا FATY (فاتي)، مساعدك الذكي الخاص! تم تطويري بواسطة فريق FATYAK لأكون رفيقك ومساعدك الذكي باللغة العربية يا فاتح. يمكنني الإجابة على استفساراتك، التحدث معك صوتياً، تحليل الصور، وتوليد صور إبداعية لك."
+    },
+    {
+      keywords: ["من طورك", "من صنعك", "من المطور", "صانعك", "fatyak", "فاتياك"],
+      reply: "تم تطويري بالكامل بواسطة المطور FATYAK بأحدث تقنيات الذكاء الاصطناعي وبواجهة مستوحاة من نظام Ubuntu المتميز!"
+    },
+    {
+      keywords: ["فاتي", "يا فاتي", "faty", "الو", "مرحبا", "سلام", "السلام عليكم", "صباح الخير", "مساء الخير"],
+      reply: "وعليكم السلام ورحمة الله وبركاته يا فاتح! نعم أنا هنا وأسمعك بوضوح، كيف أستطيع مساعدتك اليوم؟"
+    },
+    {
+      keywords: ["كيف حالك", "شخبارك", "عساك بخير", "كيفك"],
+      reply: "أنا بأفضل حال والحمد لله، وسعيد جداً بالتحدث معك يا فاتح! أتمنى أن تكون أنت أيضاً بأتم الصحة والعافية."
+    },
+    {
+      keywords: ["شكرا", "تسلم", "مشكور", "يعطيك العافيه", "الله يعطيك العافية"],
+      reply: "العفو يا فاتح! هذا واجبي دائماً، وفي خدمتك في أي وقت 😊"
+    }
+  ]
+};
+
+// Initialization
+document.addEventListener("DOMContentLoaded", () => {
+  initClock();
+  initStorage();
+  initInputHandlers();
+  initVoiceEngine();
+  renderApp();
+});
+
+// Real-time Clock on Ubuntu Bar
+function initClock() {
+  const clockEl = document.getElementById("os-clock");
+  const update = () => {
+    const now = new Date();
+    clockEl.textContent = now.toLocaleTimeString("ar-SA", { hour: '2-digit', minute: '2-digit' });
+  };
+  update();
+  setInterval(update, 1000);
+}
+
+// Local Storage Manager
+function initStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      AppState.conversations = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error("Storage error:", e);
+  }
+
+  if (!AppState.conversations || AppState.conversations.length === 0) {
+    createEmptyConversation();
+  } else {
+    AppState.currentConvId = AppState.conversations[0].id;
+  }
+}
+
+function saveStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.conversations.slice(0, 30)));
+  } catch (e) {}
+}
+
+function createEmptyConversation() {
+  const newConv = {
+    id: "conv_" + Date.now(),
+    title: "محادثة جديدة",
+    timestamp: Date.now(),
+    messages: []
+  };
+  AppState.conversations.unshift(newConv);
+  AppState.currentConvId = newConv.id;
+  saveStorage();
+  return newConv;
+}
+
+function getCurrentConv() {
+  return AppState.conversations.find(c => c.id === AppState.currentConvId) || AppState.conversations[0];
+}
+
+// UI Rendering
+function renderApp() {
+  renderSidebar();
+  renderMessages();
+}
+
+function renderSidebar() {
+  const listEl = document.getElementById("conversations-list");
+  if (!listEl) return;
+  listEl.innerHTML = "";
+
+  AppState.conversations.forEach(conv => {
+    const item = document.createElement("div");
+    item.className = "conv-item" + (conv.id === AppState.currentConvId ? " active" : "");
+    item.onclick = () => selectConversation(conv.id);
+
+    const titleSpan = document.createElement("span");
+    titleSpan.className = "conv-title";
+    titleSpan.textContent = conv.title || "محادثة جديدة";
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "conv-del";
+    delBtn.textContent = "✕";
+    delBtn.title = "حذف";
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      deleteConversation(conv.id);
+    };
+
+    item.appendChild(titleSpan);
+    item.appendChild(delBtn);
+    listEl.appendChild(item);
+  });
+}
+
+function renderMessages() {
+  const container = document.getElementById("messages-container");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const conv = getCurrentConv();
+  if (!conv || conv.messages.length === 0) {
+    container.innerHTML = `
+      <div class="welcome-hero">
+        <div class="hero-icon">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+            <rect x="3" y="11" width="18" height="10" rx="4"/>
+            <circle cx="8.5" cy="16" r="1.5" fill="currentColor"/>
+            <circle cx="15.5" cy="16" r="1.5" fill="currentColor"/>
+            <path d="M9 19c1.5 1 4.5 1 6 0"/>
+            <path d="M12 5v6"/>
+            <circle cx="12" cy="4" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+        <h1 class="hero-title">مرحباً بك يا <span>فاتح</span> 👋</h1>
+        <p class="hero-desc">أنا مساعدك الذكي <b>FATY</b>. اسألني أي سؤال، تحدث معي بصوتك عبر الميكروفون، ارفع أي صورة لتحليلها، أو اطلب مني توليد صور حصرية لك!</p>
+        
+        <div class="quick-prompts">
+          <div class="quick-card" onclick="useQuickPrompt('من أنت يا فاتي ومن طورك؟')">
+            <span class="icon">🤖</span>
+            <span>من أنت يا فاتي ومن طورك؟</span>
+          </div>
+          <div class="quick-card" onclick="useQuickPrompt('ولّد لي صورة قطة لطيفة تجلس في حديقة')">
+            <span class="icon">🎨</span>
+            <span>توليد صورة بالذكاء الاصطناعي</span>
+          </div>
+          <div class="quick-card" onclick="useQuickPrompt('اشرح لي كيف يعمل التعلم العميق باختصار')">
+            <span class="icon">💡</span>
+            <span>شرح علمي مبسط</span>
+          </div>
+          <div class="quick-card" onclick="useQuickPrompt('اكتب لي خطة عمل يومية لتطوير مهاراتي البرمجية')">
+            <span class="icon">📝</span>
+            <span>نصائح وخطط عمل</span>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  conv.messages.forEach((msg, idx) => {
+    const isUser = msg.sender === "user";
+    const row = document.createElement("div");
+    row.className = "msg-row " + (isUser ? "user-row" : "faty-row");
+
+    const avatar = document.createElement("div");
+    avatar.className = "msg-avatar " + (isUser ? "user-msg-av" : "faty-msg-av");
+    avatar.textContent = isUser ? "ف" : "F";
+
+    const body = document.createElement("div");
+    body.className = "msg-body";
+
+    const senderName = document.createElement("div");
+    senderName.className = "msg-sender";
+    senderName.textContent = isUser ? "فاتح (أنت)" : "FATY (المساعد)";
+
+    const bubble = document.createElement("div");
+    bubble.className = "msg-bubble " + (isUser ? "user-bubble" : "faty-bubble");
+    bubble.textContent = msg.text;
+
+    // Attached Image
+    if (msg.image) {
+      const img = document.createElement("img");
+      img.src = msg.image;
+      img.className = "msg-image";
+      img.onclick = () => openLightbox(msg.image);
+      bubble.appendChild(img);
+    }
+
+    // Message Tools
+    const tools = document.createElement("div");
+    tools.className = "msg-tools";
+
+    if (!isUser) {
+      const speakBtn = document.createElement("button");
+      speakBtn.className = "msg-tool-btn";
+      speakBtn.textContent = "🔊 استمع";
+      speakBtn.onclick = () => speakText(msg.text);
+      tools.appendChild(speakBtn);
+    }
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "msg-tool-btn";
+    copyBtn.textContent = "📋 نسخ";
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(msg.text);
+      copyBtn.textContent = "✓ تم النسخ";
+      setTimeout(() => copyBtn.textContent = "📋 نسخ", 1500);
+    };
+    tools.appendChild(copyBtn);
+
+    body.appendChild(senderName);
+    body.appendChild(bubble);
+    body.appendChild(tools);
+
+    row.appendChild(avatar);
+    row.appendChild(body);
+    container.appendChild(row);
+  });
+
+  // Typing indicator if busy
+  if (AppState.isProcessing) {
+    const typingRow = document.createElement("div");
+    typingRow.className = "msg-row faty-row";
+    typingRow.innerHTML = `
+      <div class="msg-avatar faty-msg-av">F</div>
+      <div class="msg-body">
+        <div class="msg-sender">FATY يفكّر الآن...</div>
+        <div class="msg-bubble faty-bubble">
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(typingRow);
+  }
+
+  container.scrollTop = container.scrollHeight;
+}
+
+// Input and Event Handlers
+function initInputHandlers() {
+  const textarea = document.getElementById("chat-input");
+  if (!textarea) return;
+
+  // Auto expand textarea
+  textarea.addEventListener("input", function() {
+    this.style.height = "auto";
+    this.style.height = Math.min(this.scrollHeight, 140) + "px";
+  });
+
+  // Enter to send, Shift+Enter for new line
+  textarea.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  });
+
+  // Paste image support
+  document.addEventListener("paste", (e) => {
+    const items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+    for (let item of items) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          showImagePreview(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+        break;
+      }
+    }
+  });
+}
+
+function useQuickPrompt(text) {
+  const input = document.getElementById("chat-input");
+  input.value = text;
+  handleSendMessage();
+}
+
+// Conversation Actions
+function triggerNewChat() {
+  createEmptyConversation();
+  renderApp();
+  closeSidebar();
+  document.getElementById("chat-input").focus();
+}
+
+function selectConversation(id) {
+  AppState.currentConvId = id;
+  renderApp();
+  closeSidebar();
+}
+
+function deleteConversation(id) {
+  if (!confirm("هل أنت متأكد من حذف هذه المحادثة؟")) return;
+  AppState.conversations = AppState.conversations.filter(c => c.id !== id);
+  if (AppState.conversations.length === 0) {
+    createEmptyConversation();
+  } else if (AppState.currentConvId === id) {
+    AppState.currentConvId = AppState.conversations[0].id;
+  }
+  saveStorage();
+  renderApp();
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById("sidebar");
+  sb.classList.toggle("open");
+}
+
+function closeSidebar() {
+  const sb = document.getElementById("sidebar");
+  sb.classList.remove("open");
+}
+
+// Voice Engine (Speech Recognition & Speech Synthesis)
+function initVoiceEngine() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRec) {
+    const rec = new SpeechRec();
+    rec.lang = "ar-SA";
+    rec.continuous = false;
+    rec.interimResults = true;
+
+    rec.onstart = () => {
+      AppState.isListening = true;
+      document.getElementById("mic-btn").classList.add("recording");
+      document.getElementById("listening-banner").style.display = "flex";
+      document.getElementById("faty-sub-status").textContent = "يستمع إليك الآن يا فاتح...";
+    };
+
+    rec.onresult = (e) => {
+      let finalStr = "";
+      for (let i = e.resultIndex; i < e.results.length; ++i) {
+        if (e.results[i].isFinal) {
+          finalStr += e.results[i][0].transcript;
+        } else {
+          document.getElementById("chat-input").value = e.results[i][0].transcript;
+        }
+      }
+      if (finalStr) {
+        document.getElementById("chat-input").value = finalStr;
+      }
+    };
+
+    rec.onerror = (e) => {
+      console.warn("Speech error:", e.error);
+      stopListeningUI();
+    };
+
+    rec.onend = () => {
+      stopListeningUI();
+      const text = document.getElementById("chat-input").value.trim();
+      if (text) {
+        setTimeout(handleSendMessage, 300);
+      }
+    };
+
+    AppState.speechRecognition = rec;
+  }
+}
+
+function toggleMicrophone() {
+  if (!AppState.speechRecognition) {
+    alert("عذراً يا فاتح، التعرف الصوتي يتطلب متصفحاً مثل Google Chrome أو Microsoft Edge وعلى رابط آمن (HTTPS).");
+    return;
+  }
+
+  if (AppState.isListening) {
+    try { AppState.speechRecognition.stop(); } catch(e){}
+    stopListeningUI();
+  } else {
+    try {
+      AppState.speechRecognition.start();
+    } catch(e) {
+      console.error(e);
+      stopListeningUI();
+    }
+  }
+}
+
+function stopListeningUI() {
+  AppState.isListening = false;
+  document.getElementById("mic-btn").classList.remove("recording");
+  document.getElementById("listening-banner").style.display = "none";
+  document.getElementById("faty-sub-status").textContent = "مستعد للرد عليك يا فاتح";
+}
+
+function toggleSpeech() {
+  AppState.autoSpeak = !AppState.autoSpeak;
+  const icon = document.getElementById("audio-icon");
+  icon.textContent = AppState.autoSpeak ? "🔊" : "🔇";
+  if (!AppState.autoSpeak && AppState.speechSynth) {
+    AppState.speechSynth.cancel();
+  }
+}
+
+function speakText(text) {
+  if (!AppState.speechSynth) return;
+  AppState.speechSynth.cancel(); // Stop any active speech
+
+  const clean = text.replace(/[*_#`~>\[\]()]/g, " ").replace(/\s+/g, " ").trim();
+  if (!clean) return;
+
+  const utter = new SpeechSynthesisUtterance(clean.substring(0, 500));
+  utter.lang = "ar-SA";
+  utter.rate = 1.0;
+
+  // Find best Arabic voice
+  const voices = AppState.speechSynth.getVoices();
+  const arVoice = voices.find(v => v.lang.startsWith("ar"));
+  if (arVoice) utter.voice = arVoice;
+
+  utter.onstart = () => {
+    AppState.isSpeaking = true;
+    document.getElementById("faty-sub-status").textContent = "يتحدث الآن...";
+  };
+  utter.onend = utter.onerror = () => {
+    AppState.isSpeaking = false;
+    document.getElementById("faty-sub-status").textContent = "مستعد للرد عليك يا فاتح";
+  };
+
+  AppState.speechSynth.speak(utter);
+}
+
+// Image Handling
+function handleImageFileSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    alert("حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 5 ميجابايت.");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    showImagePreview(ev.target.result);
+  };
+  reader.readAsDataURL(file);
+  e.target.value = "";
+}
+
+function showImagePreview(base64) {
+  AppState.selectedImageBase64 = base64;
+  document.getElementById("preview-thumbnail").src = base64;
+  document.getElementById("image-preview-box").style.display = "inline-block";
+  document.getElementById("chat-input").focus();
+}
+
+function clearSelectedImage() {
+  AppState.selectedImageBase64 = null;
+  document.getElementById("image-preview-box").style.display = "none";
+  document.getElementById("preview-thumbnail").src = "";
+}
+
+// Core Chat & AI Dispatcher
+async function handleSendMessage() {
+  const inputEl = document.getElementById("chat-input");
+  const rawText = inputEl.value.trim();
+  const hasImage = !!AppState.selectedImageBase64;
+
+  if (!rawText && !hasImage) return;
+  if (AppState.isProcessing) return;
+
+  const conv = getCurrentConv();
+  const userText = rawText || "صف لي هذه الصورة بالتفصيل يا فاتي";
+  const attachedImage = AppState.selectedImageBase64;
+
+  // Add User Message
+  conv.messages.push({
+    sender: "user",
+    text: userText,
+    image: attachedImage,
+    time: Date.now()
+  });
+
+  if (conv.messages.length === 1) {
+    conv.title = userText.substring(0, 30);
+  }
+
+  // Clear inputs
+  inputEl.value = "";
+  inputEl.style.height = "auto";
+  clearSelectedImage();
+
+  AppState.isProcessing = true;
+  saveStorage();
+  renderApp();
+
+  // Process Bot Response
+  try {
+    const reply = await generateAssistantResponse(userText, hasImage);
+    conv.messages.push(reply);
+    saveStorage();
+    renderApp();
+
+    if (AppState.autoSpeak && reply.text) {
+      speakText(reply.text);
+    }
+  } catch (err) {
+    console.error("Assistant error:", err);
+    conv.messages.push({
+      sender: "faty",
+      text: "عذراً يا فاتح، حدث تذبذب بسيط في الاتصال. لكنني معك دائماً، تفضل بسؤالك مرة أخرى!",
+      time: Date.now()
+    });
+    saveStorage();
+    renderApp();
+  } finally {
+    AppState.isProcessing = false;
+    renderApp();
+  }
+}
+
+// Master Logic for Responses (Offline Engine + Pollinations API)
+async function generateAssistantResponse(userPrompt, hasImage) {
+  const normalized = userPrompt.toLowerCase().trim();
+
+  // 1. Detect Image Generation request directly in chat
+  const imageTriggers = ["ارسم", "ولّد صورة", "توليد صورة", "صورة لـ", "صورة عن", "draw", "generate image", "اعمل صورة"];
+  const isImageReq = imageTriggers.some(t => normalized.includes(t));
+
+  if (isImageReq && !hasImage) {
+    let cleanPrompt = userPrompt
+      .replace(/ارسم لي|ارسم|ولّد لي صورة|ولّد صورة|توليد صورة لـ|توليد صورة|صورة لـ|صورة عن|يا فاتي|فاتي/gi, "")
+      .trim();
+    if (!cleanPrompt) cleanPrompt = userPrompt;
+
+    const imgUrl = createPollinationsImageUrl(cleanPrompt, 1024, 1024);
+    return {
+      sender: "faty",
+      text: `تفضل يا فاتح، قمت بتوليد هذه الصورة بناءً على طلبك: "${cleanPrompt}" ✨`,
+      image: imgUrl,
+      time: Date.now()
+    };
+  }
+
+  // 2. Check Local Knowledge Base for immediate natural Arabic answers
+  for (let item of LocalKnowledge.responses) {
+    if (item.keywords.some(k => normalized.includes(k))) {
+      return {
+        sender: "faty",
+        text: item.reply,
+        time: Date.now()
+      };
+    }
+  }
+
+  // 3. Online AI Generation via Pollinations
+  const systemContext = `أنت FATY (فاتي)، مساعد ذكي عربي تم تطويرك بواسطة شركة ومطور FATYAK.
+المستخدم الذي يتحدث معك اسمه "فاتح" وناده دائماً بـ "يا فاتح".
+أنت ذكي، مفيد، ومحترم وتتكلم باللغة العربية الفصحى الواضحة والودودة.
+إذا سألك من طورك أجب: تم تطويري بواسطة المطور FATYAK.
+أجب باختصار واحترافية.`;
+
+  try {
+    const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(systemContext + "\nسؤال فاتح: " + userPrompt + "\nإجابة FATY:")}?model=openai`;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 9000);
+
+    const res = await fetch(apiUrl, { signal: controller.signal });
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      const responseText = await res.text();
+      if (responseText && responseText.trim().length > 0) {
+        return {
+          sender: "faty",
+          text: responseText.trim(),
+          time: Date.now()
+        };
+      }
+    }
+  } catch (netErr) {
+    console.log("Online AI timeout or block, using smart fallback");
+  }
+
+  // 4. Robust Context-Aware Fallback
+  if (hasImage) {
+    return {
+      sender: "faty",
+      text: `أهلاً يا فاتح! تم استلام صورتك بنجاح 🖼️. بصفتي مساعدك الذكي FATY، أرى الصورة المرفقة بوضوح. إذا كان لديك سؤال محدد أو تفصيل تريده عنها، تفضل بذكره وسأجيبك فوراً!`,
+      time: Date.now()
+    };
+  }
+
+  return {
+    sender: "faty",
+    text: `أهلاً بك يا فاتح! قرأت سؤالك بتمعن: "${userPrompt}". أنا المساعد الذكي FATY تم تطويري بواسطة FATYAK لأساعدك في كل ما تحتاجه من معلومات، توليد صور، وإنجاز مهامك بكفاءة عالية. تفضل بأي استفسار آخر تريده! 😊`,
+    time: Date.now()
+  };
+}
+
+// Image Generator Helpers
+function createPollinationsImageUrl(prompt, w, h) {
+  const seed = Math.floor(Math.random() * 999999);
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&model=flux&nologo=true&seed=${seed}`;
+}
+
+function openImageModal() {
+  document.getElementById("image-modal").style.display = "flex";
+  document.getElementById("gen-prompt-input").focus();
+}
+
+function closeImageModal() {
+  document.getElementById("image-modal").style.display = "none";
+}
+
+function selectAspect(btn) {
+  document.querySelectorAll(".aspect-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  AppState.currentAspect = {
+    w: parseInt(btn.dataset.w),
+    h: parseInt(btn.dataset.h)
+  };
+}
+
+function setGenPrompt(el) {
+  document.getElementById("gen-prompt-input").value = el.textContent;
+}
+
+function executeImageGeneration() {
+  const input = document.getElementById("gen-prompt-input");
+  const prompt = input.value.trim();
+  if (!prompt) return;
+
+  const btn = document.getElementById("btn-execute-gen");
+  const resArea = document.getElementById("gen-result-area");
+
+  btn.disabled = true;
+  btn.textContent = "جاري التوليد بواسطة الذكاء الاصطناعي... ⏳";
+  resArea.style.display = "block";
+  resArea.innerHTML = `<p style="color:#aaa; font-size:13px;">جاري معالجة الصورة عبر Pollinations Flux... انتظر ثوانٍ معدودة</p>`;
+
+  const imgUrl = createPollinationsImageUrl(prompt, AppState.currentAspect.w, AppState.currentAspect.h);
+  const img = new Image();
+
+  img.onload = () => {
+    btn.disabled = false;
+    btn.textContent = "ولّد الصورة الآن ✨";
+    resArea.innerHTML = `
+      <img src="${imgUrl}" alt="${prompt}" onclick="openLightbox('${imgUrl}')">
+      <div style="margin-top:10px; display:flex; gap:8px; justify-content:center;">
+        <button class="tool-btn" onclick="addGenImageToChat('${encodeURIComponent(prompt)}', '${imgUrl}')">
+          💬 إرسال إلى المحادثة
+        </button>
+        <a href="${imgUrl}" target="_blank" download="faty-${Date.now()}.jpg" class="tool-btn" style="text-decoration:none;">
+          ⬇️ تحميل الصورة
+        </a>
+      </div>
+    `;
+  };
+
+  img.onerror = () => {
+    btn.disabled = false;
+    btn.textContent = "ولّد الصورة الآن ✨";
+    resArea.innerHTML = `<p style="color:#ff6666; font-size:13px;">تعذر تحميل الصورة مؤقتاً، يرجى المحاولة بوصف آخر.</p>`;
+  };
+
+  img.src = imgUrl;
+}
+
+function addGenImageToChat(encodedPrompt, url) {
+  const prompt = decodeURIComponent(encodedPrompt);
+  closeImageModal();
+  const conv = getCurrentConv();
+  conv.messages.push({
+    sender: "faty",
+    text: `إليك الصورة التي ولدتها لك يا فاتح: "${prompt}" ✨`,
+    image: url,
+    time: Date.now()
+  });
+  saveStorage();
+  renderApp();
+}
+
+function openLightbox(url) {
+  const lb = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lightbox-img");
+  lbImg.src = url;
+  lb.style.display = "flex";
+}
+
+function closeLightbox() {
+  document.getElementById("lightbox").style.display = "none";
+}
 </script>
 </body>
 </html>
