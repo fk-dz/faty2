@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/fatyak-logo.png" alt="FATYAK Logo" width="120" />
+<img alt="FATYAK" width="110" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='4' y1='2' x2='60' y2='62' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%23F2B457'/%3E%3Cstop offset='.6' stop-color='%23E95420'/%3E%3Cstop offset='1' stop-color='%23C7567F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='3.5' y='3.5' width='57' height='57' rx='18' fill='%231D1828'/%3E%3Crect x='4.25' y='4.25' width='55.5' height='55.5' rx='17.25' fill='none' stroke='url(%23a)' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='24.5' fill='none' stroke='url(%23a)' stroke-width='.9' stroke-dasharray='2.5 7' opacity='.5'/%3E%3Cpath d='M23.5 47.5V17.5h19' stroke='url(%23a)' stroke-width='4.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M23.5 33h12.5' stroke='%23F2B457' stroke-width='4.6' stroke-linecap='round'/%3E%3Ccircle cx='45.5' cy='17.5' r='5.6' fill='none' stroke='%23F2B457' stroke-width='.9' opacity='.45'/%3E%3Ccircle cx='45.5' cy='17.5' r='3.5' fill='%23FF9A4D'/%3E%3C/svg%3E" />
 
 # 🤖 FATY — المساعد الذكي العربي
 
@@ -93,25 +93,26 @@ npm run build
 ## 📂 هيكل المشروع
 
 ```
-faty-assistant/
-├── public/                  # الصور والأصول
-│   ├── fatyak-logo.png     # شعار المطور
-│   ├── faty-avatar.png     # صورة المساعد
-│   └── fateh-avatar.png    # صورة المستخدم
+faty/
 ├── src/
 │   ├── components/
-│   │   ├── ChatArea.tsx        # منطقة المحادثة
-│   │   ├── Sidebar.tsx         # الشريط الجانبي
-│   │   ├── ImageGenerator.tsx  # مولد الصور
-│   │   └── Icons.tsx           # الأيقونات
+│   │   ├── Mark.tsx          # الشعار + المؤشر الحي (Orb)
+│   │   ├── ChatArea.tsx      # منطقة المحادثة
+│   │   ├── Sidebar.tsx       # الشريط الجانبي
+│   │   ├── ImageStudio.tsx   # الاستوديو
+│   │   └── Icons.tsx         # الأيقونات
 │   ├── utils/
-│   │   ├── ai.ts           # الاتصال بالذكاء الاصطناعي
-│   │   └── voice.ts        # الصوت والميكروفون
-│   ├── App.tsx             # المكون الرئيسي
-│   ├── main.tsx            # نقطة الدخول
-│   └── index.css           # التنسيقات
-└── index.html
+│   │   ├── ai.ts             # الاتصال بالذكاء الاصطناعي
+│   │   └── voice.ts          # الصوت والميكروفون
+│   ├── App.tsx               # المكوّن الرئيسي + الخلفية
+│   ├── main.tsx              # نقطة الدخول
+│   └── index.css             # نظام التصميم
+├── dist/
+│   └── index.html            # ⬅️ الملف الجاهز للنشر (واحد مكتفٍ بذاته)
+└── index.html                # مدخل Vite (للتطوير فقط)
 ```
+
+> 📦 الشعار مرسوم بـ SVG مضمّن — لا توجد أي صور خارجية، لذلك `dist/index.html` يعمل وحده.
 
 ## 🎤 المتصفحات المدعومة
 
