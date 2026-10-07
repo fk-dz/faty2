@@ -1,13 +1,43 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="FATY - مساعد ذكي عربي مجاني يعمل بالذكاء الاصطناعي" />
-    <title>FATY - المساعد الذكي | FATYAK</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FATY - المساعد الذكي | يُحوِّلك الآن...</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a1a;height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Cairo',system-ui,sans-serif;color:#fff;direction:rtl}
+.box{text-align:center;max-width:340px;padding:30px}
+.av{width:80px;height:80px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,#E95420,#772953);display:flex;align-items:center;justify-content:center;border:3px solid #E95420}
+h1{font-size:24px;margin-bottom:8px}
+p{color:#a0a0a0;font-size:14px;margin-bottom:20px}
+.bar{width:100%;height:4px;background:#3d3d3d;border-radius:2px;overflow:hidden}
+.bar::after{content:'';display:block;width:30%;height:100%;background:#E95420;border-radius:2px;animation:load 1.2s infinite}
+@keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
+a{color:#E95420;text-decoration:none;font-size:13px;margin-top:12px;display:inline-block}
+a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="av">
+    <svg width="45" height="45" viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round">
+      <rect x="9" y="13" width="22" height="17" rx="6"/>
+      <line x1="20" y1="7" x2="20" y2="13"/>
+      <circle cx="20" cy="5.5" r="2.2" fill="#fff" stroke="none"/>
+      <circle cx="15.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/>
+      <circle cx="24.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/>
+      <path d="M15.5 25.5c1.7 1.7 7.3 1.7 9 0"/>
+    </svg>
+  </div>
+  <h1>FATY</h1>
+  <p>يُحوِّلك إلى المساعد الذكي...</p>
+  <div class="bar"></div>
+  <a href="app.html">اضغط هنا إذا لم يتم التحويل تلقائياً</a>
+</div>
+<script>
+// Redirect to the built app
+window.location.replace("app.html");
+</script>
+</body>
 </html>

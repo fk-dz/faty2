@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FATY - المساعد الذكي | FATYAK</title>
+<meta name="description" content="FATY مساعد ذكي عربي مجاني بدون مفتاح API - تطوير FATYAK">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect x='9' y='13' width='22' height='17' rx='6' fill='%23E95420'/><circle cx='15.5' cy='20.5' r='2.3' fill='white'/><circle cx='24.5' cy='20.5' r='2.3' fill='white'/><path d='M15.5 25.5c1.7 1.7 7.3 1.7 9 0' stroke='white' stroke-width='2' fill='none' stroke-linecap='round'/></svg>">
+<style>
+:root{--o:#E95420;--o2:#F37D38;--pur:#772953;--bg:#1a1a1a;--bg2:#1f1f1f;--card:#2d2d2d;--bd:#3d3d3d;--mut:#a0a0a0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Cairo',system-ui,Tahoma,sans-serif;background:var(--bg);color:#fff;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:9px}::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:#4a4a4a;border-radius:5px}::-webkit-scrollbar-thumb:hover{background:var(--o)}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+#app{display:flex;height:100%}
+
+aside{width:278px;background:var(--bg2);border-left:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;z-index:40;transition:transform .3s}
+.sb-head{padding:16px;border-bottom:1px solid var(--bd)}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.brand h1{font-size:18px}.brand p{font-size:11px;color:var(--mut)}
+.btn-p{background:linear-gradient(180deg,var(--o),#c44418);border:1px solid var(--o);border-radius:9px;padding:10px;width:100%;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.btn-p:hover{background:linear-gradient(180deg,var(--o2),var(--o));box-shadow:0 4px 15px rgba(233,84,32,.4)}
+.dev{padding:10px 16px;border-bottom:1px solid var(--bd);font-size:11px;color:var(--mut);background:linear-gradient(270deg,rgba(44,0,30,.5),transparent)}
+.grad{background:linear-gradient(135deg,var(--o),var(--o2),#FFA500);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+#convs{flex:1;overflow-y:auto;padding:8px}
+.lbl{padding:6px 10px;font-size:10px;color:var(--mut);letter-spacing:1px}
+.ci{padding:10px;border-radius:7px;cursor:pointer;display:flex;gap:8px;align-items:flex-start;transition:.15s}
+.ci:hover{background:rgba(233,84,32,.14)}
+.ci.on{background:linear-gradient(270deg,rgba(233,84,32,.26),transparent);border-right:3px solid var(--o)}
+.ci b{font-size:13px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci span{font-size:11px;color:#808080;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.del{opacity:0;color:var(--mut);padding:2px;flex-shrink:0;font-size:15px}
+.ci:hover .del{opacity:1}.del:hover{color:#f87171}
+.sb-foot{padding:14px 16px;border-top:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+
+main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+.top{background:linear-gradient(180deg,var(--card),#232323);border-bottom:1px solid var(--bd);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tl{display:flex;align-items:center;gap:10px;min-width:0}
+.tl h2{font-size:14px}
+.dot{width:6px;height:6px;background:#4ade80;border-radius:50%;display:inline-block}
+.st{font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{padding:8px;border-radius:8px;color:var(--mut);transition:.2s;display:flex;align-items:center;gap:6px;font-size:12px}
+.ib:hover{background:var(--bd);color:#fff}
+.ib.act{background:rgba(233,84,32,.2);color:var(--o)}
+#burger{display:none}
+
+#msgs{flex:1;overflow-y:auto;padding:22px 14px}
+.wrap{max-width:860px;margin:0 auto}
+.row{display:flex;gap:10px;margin-bottom:16px;animation:in .35s ease-out}
+.row.me{flex-direction:row-reverse}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;overflow:hidden;border:2px solid var(--o)}
+.av.f{background:linear-gradient(135deg,var(--o),var(--pur))}
+.av.u{background:linear-gradient(135deg,#3b82f6,var(--pur))}
+.col{max-width:76%;display:flex;flex-direction:column}
+.row.me .col{align-items:flex-end}
+.nm{font-size:11px;font-weight:600;padding:0 6px 4px;color:#fff}
+.nm i{color:#707070;font-style:normal;font-weight:400;font-size:10px}
+.bub{padding:11px 15px;font-size:14px;line-height:1.85;white-space:pre-wrap;word-break:break-word}
+.bub.b{background:linear-gradient(135deg,var(--card),#232323);border:1px solid var(--bd);border-radius:17px 17px 17px 4px}
+.bub.m{background:linear-gradient(135deg,var(--o),#c44418);border-radius:17px 17px 4px 17px}
+.bub img{max-width:100%;border-radius:11px;display:block;cursor:zoom-in;margin-top:7px}
+.acts{display:flex;gap:3px;padding:4px 6px}
+.acts button{color:#808080;padding:3px;font-size:13px;border-radius:4px}
+.acts button:hover{color:var(--o)}
+.dl{font-size:11px;color:var(--mut);text-decoration:none;display:inline-flex;gap:4px;margin-top:6px}
+.dl:hover{color:var(--o)}
+
+.wel{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.bigav{width:92px;height:92px;border-radius:50%;border:4px solid var(--o);background:linear-gradient(135deg,var(--o),var(--pur));display:grid;place-items:center;margin-bottom:18px;animation:gl 2.4s infinite}
+@keyframes gl{0%,100%{box-shadow:0 0 16px rgba(233,84,32,.45)}50%{box-shadow:0 0 38px rgba(233,84,32,.8)}}
+.wel h3{font-size:28px;margin-bottom:6px}
+.wel p{color:var(--mut);font-size:14px;margin-bottom:4px}
+.wel .sm{font-size:12.5px;color:#707070;max-width:430px;margin-bottom:22px;line-height:1.9}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;max-width:720px;margin-bottom:20px}
+.chip{background:var(--card);border:1px solid var(--bd);border-radius:13px;padding:12px 10px;text-align:right;transition:.2s;font-size:12px;line-height:1.6}
+.chip:hover{border-color:var(--o);transform:translateY(-3px);background:rgba(233,84,32,.12)}
+.chip b{display:block;font-size:21px;margin-bottom:5px;font-weight:400}
+
+.comp{border-top:1px solid var(--bd);background:var(--bg2);padding:13px 14px}
+.box{max-width:860px;margin:0 auto;display:flex;align-items:flex-end;gap:5px;background:var(--card);border:1px solid var(--bd);border-radius:19px;padding:6px;transition:.2s}
+.box:focus-within{border-color:var(--o)}
+#ta{flex:1;background:none;border:0;outline:0;color:#fff;font-family:inherit;font-size:14px;padding:9px 6px;resize:none;max-height:140px;line-height:1.6}
+#ta::placeholder{color:#707070}
+.cb{padding:9px;border-radius:9px;color:var(--mut);transition:.2s;flex-shrink:0}
+.cb:hover{background:var(--bd);color:#fff}
+.send{background:linear-gradient(180deg,var(--o),#c44418);color:#fff}
+.send:hover{background:linear-gradient(180deg,var(--o2),var(--o))}
+.send:disabled{opacity:.45;cursor:not-allowed}
+.rec{background:#ef4444!important;color:#fff!important;animation:pp 1.2s infinite}
+@keyframes pp{0%,100%{opacity:1}50%{opacity:.55}}
+.hint{max-width:860px;margin:7px auto 0;display:flex;justify-content:space-between;font-size:10px;color:#707070}
+.pv{max-width:860px;margin:0 auto 9px;display:inline-flex;position:relative}
+.pv img{height:66px;border-radius:9px;border:2px solid var(--o)}
+.pv button{position:absolute;top:-7px;left:-7px;background:#ef4444;color:#fff;width:21px;height:21px;border-radius:50%;font-size:13px;line-height:1}
+
+.ban{padding:8px 14px;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ban.err{background:rgba(239,68,68,.12);border-bottom:1px solid rgba(239,68,68,.3);color:#fca5a5}
+.ban.mic{background:linear-gradient(90deg,rgba(233,84,32,.22),transparent);border-bottom:1px solid rgba(233,84,32,.3);color:var(--o2)}
+.wv{display:inline-flex;gap:3px;align-items:center;height:22px}
+.wv i{width:3px;background:var(--o);border-radius:2px;animation:wv .75s infinite ease-in-out}
+.wv i:nth-child(2){animation-delay:.1s}.wv i:nth-child(3){animation-delay:.2s}
+.wv i:nth-child(4){animation-delay:.3s}.wv i:nth-child(5){animation-delay:.4s}
+@keyframes wv{0%,100%{height:6px}50%{height:21px}}
+.typ{display:inline-flex;gap:5px}
+.typ i{width:7px;height:7px;background:var(--o);border-radius:50%;animation:tp 1.3s infinite}
+.typ i:nth-child(2){animation-delay:.2s}.typ i:nth-child(3){animation-delay:.4s}
+@keyframes tp{0%,100%{opacity:.3}50%{opacity:1}}
+
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.86);backdrop-filter:blur(7px);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
+.mod.show{display:flex}
+.sheet{background:linear-gradient(135deg,var(--card),var(--bg2));border:1px solid var(--bd);border-radius:13px;max-width:620px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.sh-h{padding:15px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(270deg,rgba(233,84,32,.12),transparent)}
+.sh-b{padding:19px;display:flex;flex-direction:column;gap:15px}
+.sh-b label{font-size:13px;font-weight:600;display:block;margin-bottom:7px}
+#ip{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:11px;color:#fff;font-family:inherit;font-size:14px;resize:none;outline:0}
+#ip:focus{border-color:var(--o)}
+.ratios{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.rb{background:linear-gradient(180deg,#3a3a3a,var(--card));border:1px solid #4a4a4a;border-radius:8px;padding:8px;font-size:12.5px;transition:.2s}
+.rb.on{background:linear-gradient(180deg,var(--o),#c44418);border-color:var(--o)}
+.ideas{display:flex;flex-wrap:wrap;gap:6px}
+.idea{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:6px 11px;font-size:11.5px;transition:.2s}
+.idea:hover{border-color:var(--o);background:rgba(233,84,32,.16)}
+#out img{width:100%;border-radius:10px;border:1px solid var(--bd)}
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:70;display:none;align-items:center;justify-content:center;padding:22px;cursor:zoom-out}
+#lb.show{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:10px}
+
+@media(max-width:900px){
+ .chips{grid-template-columns:repeat(2,1fr)}
+ #burger{display:flex}
+ aside{position:fixed;top:0;right:0;height:100%;transform:translateX(100%)}
+ aside.open{transform:none;box-shadow:-10px 0 40px rgba(0,0,0,.6)}
+ #ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:35;display:none}
+ #ov.show{display:block}
+ .col{max-width:86%}
+}
+</style>
+</head>
+<body>
+
+<div id="ov"></div>
+<div id="app">
+
+  <aside id="sb">
+    <div class="sb-head">
+      <div class="brand">
+        <div class="av" style="border-radius:9px;background:linear-gradient(135deg,#2C001E,var(--o));border-color:rgba(233,84,32,.5)">
+          <svg width="22" height="22" viewBox="0 0 40 40"><circle cx="20" cy="20" r="12" fill="none" stroke="#fff" stroke-width="2.2" stroke-dasharray="4 3"/><text x="20" y="25" fill="#fff" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">F</text></svg>
+        </div>
+        <div style="flex:1"><h1>FATY</h1><p>المساعد الذكي</p></div>
+        <button class="ib" id="closeSb" style="display:none">✕</button>
+      </div>
+      <button class="btn-p" onclick="newConv()">＋ محادثة جديدة</button>
+    </div>
+    <div class="dev">تطوير: <span class="grad">FATYAK</span></div>
+    <div id="convs"><div class="lbl">المحادثات</div><div id="clist"></div></div>
+    <div class="sb-foot">
+      <div class="av u"><svg width="20" height="20" viewBox="0 0 40 40"><text x="20" y="27" fill="#fff" font-size="19" font-weight="bold" text-anchor="middle" font-family="Cairo,sans-serif">ف</text></svg></div>
+      <div><div style="font-size:13px;font-weight:600">فاتح</div><div style="font-size:11px;color:var(--mut)">المستخدم</div></div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="top">
+      <div class="tl">
+        <button class="ib" id="burger" onclick="toggleSb()">☰</button>
+        <div class="av f"><svg width="22" height="22" viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="13" width="22" height="17" rx="6"/><line x1="20" y1="7" x2="20" y2="13"/><circle cx="20" cy="5.5" r="2.2" fill="#fff" stroke="none"/><circle cx="15.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/><circle cx="24.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/><path d="M15.5 25.5c1.7 1.7 7.3 1.7 9 0"/></svg></div>
+        <div style="min-width:0">
+          <h2>FATY <span style="font-size:10px;color:#4ade80;font-weight:400"><span class="dot"></span> متصل</span></h2>
+          <div class="st" id="status">جاهز للمساعدة يا فاتح</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:3px">
+        <button class="ib" onclick="openGen()" title="توليد صورة">✨<span class="hd">توليد صورة</span></button>
+        <button class="ib act" id="spk" onclick="toggleSpeak()" title="الصوت التلقائي">🔊</button>
+      </div>
+    </div>
+
+    <div class="ban err" id="err" style="display:none"><span id="errT"></span><button onclick="hideErr()">✕</button></div>
+    <div class="ban mic" id="micB" style="display:none">
+      <span style="display:flex;align-items:center;gap:9px"><span class="wv"><i></i><i></i><i></i><i></i><i></i></span> أستمع إليك يا فاتح... تكلم الآن</span>
+    </div>
+
+    <div id="msgs"></div>
+
+    <div class="comp">
+      <div id="pvWrap"></div>
+      <div class="box">
+        <input type="file" id="file" accept="image/*" hidden>
+        <button class="cb" onclick="file.click()" title="رفع صورة">📎</button>
+        <button class="cb" onclick="openGen()" title="توليد صورة">✨</button>
+        <textarea id="ta" rows="1" placeholder="اكتب رسالتك... أو اضغط 🎤 وتحدث بالعربية"></textarea>
+        <button class="cb" id="mic" onclick="toggleMic()" title="تحدث">🎤</button>
+        <button class="cb send" id="send" onclick="send()" title="إرسال">➤</button>
+      </div>
+      <div class="hint"><span>Enter للإرسال • Shift+Enter لسطر جديد</span><span>تطوير <span class="grad">FATYAK</span></span></div>
+    </div>
+  </main>
+</div>
+
+<div class="mod" id="gen">
+  <div class="sheet">
+    <div class="sh-h">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="av" style="border-radius:9px;background:linear-gradient(135deg,var(--o),#c44418)">✨</div>
+        <div><b style="font-size:16px">مولّد الصور الذكي</b><div style="font-size:11px;color:var(--mut)">صف الصورة بالعربية أو الإنجليزية</div></div>
+      </div>
+      <button class="ib" onclick="closeGen()">✕</button>
+    </div>
+    <div class="sh-b">
+      <div><label>وصف الصورة</label><textarea id="ip" rows="3" placeholder="مثال: قطة بيضاء على نافذة بإضاءة ذهبية..."></textarea></div>
+      <div><label>نسبة الأبعاد</label><div class="ratios" id="ratios"></div></div>
+      <div><label>أفكار سريعة</label><div class="ideas" id="ideas"></div></div>
+      <button class="btn-p" id="genBtn" onclick="doGen()">✨ ولّد الصورة</button>
+      <div id="out"></div>
+    </div>
+  </div>
+</div>
+
+<div id="lb" onclick="this.classList.remove('show')"><img id="lbImg" src="" alt=""></div>
+
+<script>
+var TXT="https://text.pollinations.ai", IMG="https://image.pollinations.ai/prompt";
+
+var SYS="أنت FATY (تُنطق فاتي)، مساعد ذكي عربي طوّرته شركة FATYAK. "+
+"اسم المستخدم الذي تتحدث معه هو (فاتح) وناده دائماً بـ«يا فاتح». "+
+"تحدث بالعربية الفصحى المبسّطة دائماً إلا إذا طلب غير ذلك. "+
+"كن ودوداً وذكياً ومختصراً (من جملة إلى أربع جمل) إلا إذا طُلب التفصيل. "+
+"استخدم الإيموجي باعتدال. لا تقل أبداً إنك نموذج لغوي أو تابع لشركة أخرى؛ "+
+"إذا سُئلت من طوّرك فقل: طوّرني فريق FATYAK. عندما يناديك أحد باسم «فاتي» استجب فوراً بحماس.";
+
+var S={conv:[],cur:null,busy:false,listening:false,speaking:false,auto:true,img:null,rec:null};
+var K="faty_v1";
+var $=function(i){return document.getElementById(i)};
+
+var AV_F='<div class="av f"><svg width="22" height="22" viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="13" width="22" height="17" rx="6"/><line x1="20" y1="7" x2="20" y2="13"/><circle cx="20" cy="5.5" r="2.2" fill="#fff" stroke="none"/><circle cx="15.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/><circle cx="24.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/><path d="M15.5 25.5c1.7 1.7 7.3 1.7 9 0"/></svg></div>';
+var AV_U='<div class="av u"><svg width="20" height="20" viewBox="0 0 40 40"><text x="20" y="27" fill="#fff" font-size="19" font-weight="bold" text-anchor="middle" font-family="Cairo,sans-serif">ف</text></svg></div>';
+
+function load(){try{var d=JSON.parse(localStorage.getItem(K));if(d&&d.length){S.conv=d;S.cur=d[0].id;return}}catch(e){}
+ newConv(true)}
+function save(){try{localStorage.setItem(K,JSON.stringify(S.conv.slice(0,40)))}catch(e){}}
+function cur(){for(var i=0;i<S.conv.length;i++)if(S.conv[i].id===S.cur)return S.conv[i];return S.conv[0]}
+
+function newConv(silent){
+ var c={id:"c"+Date.now(),title:"محادثة جديدة",msgs:[],t:Date.now()};
+ S.conv.unshift(c);S.cur=c.id;save();
+ if(!silent){renderAll();closeSb()}
+}
+function pick(id){S.cur=id;renderAll();closeSb()}
+function delConv(id,e){
+ e.stopPropagation();
+ if(!confirm("حذف هذه المحادثة؟"))return;
+ S.conv=S.conv.filter(function(c){return c.id!==id});
+ if(!S.conv.length){newConv(true)}else if(S.cur===id){S.cur=S.conv[0].id}
+ save();renderAll();
+}
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function ago(t){var d=(Date.now()-t)/1000;
+ if(d<60)return"الآن";if(d<3600)return"منذ "+(d/60|0)+" د";
+ if(d<86400)return"منذ "+(d/3600|0)+" سا";return"منذ "+(d/86400|0)+" يوم"}
+
+function renderList(){
+ var h="";
+ S.conv.forEach(function(c){
+  var last=c.msgs.length?c.msgs[c.msgs.length-1].c:"محادثة فارغة";
+  h+='<div class="ci'+(c.id===S.cur?' on':'')+'" onclick="pick(\''+c.id+'\')">'+
+     '<span style="color:var(--mut);font-size:13px">💬</span><div style="flex:1;min-width:0">'+
+     '<b>'+esc(c.title)+'</b><span>'+esc(last.substring(0,46))+'</span>'+
+     '<span style="font-size:10px;color:#606060">'+ago(c.t)+'</span></div>'+
+     '<button class="del" onclick="delConv(\''+c.id+'\',event)">🗑</button></div>';
+ });
+ $("clist").innerHTML=h;
+}
+
+var CHIPS=[["💡","من أنت يا فاتي؟"],["🎨","ولّد لي صورة قطة لطيفة"],["📝","اكتب قصيدة قصيرة عن الأمل"],
+["🤖","اشرح لي ما هو الذكاء الاصطناعي"],["🌍","ما هي عاصمة اليابان؟"],["🍳","أعطني وصفة كبسة سعودية"],
+["💻","علّمني أساسيات البرمجة"],["🎤","اضغط الميكروفون وتحدث معي"]];
+
+function renderMsgs(){
+ var c=cur(),m=$("msgs");
+ if(!c.msgs.length){
+  var ch="";CHIPS.forEach(function(x){ch+='<button class="chip" onclick="quick(this)" data-t="'+esc(x[1])+'"><b>'+x[0]+'</b>'+esc(x[1])+'</button>'});
+  m.innerHTML='<div class="wel">'+
+   '<div class="bigav"><svg width="48" height="48" viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="9" y="13" width="22" height="17" rx="6"/><line x1="20" y1="7" x2="20" y2="13"/><circle cx="20" cy="5.5" r="2.2" fill="#fff" stroke="none"/><circle cx="15.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/><circle cx="24.5" cy="20.5" r="2.3" fill="#fff" stroke="none"/><path d="M15.5 25.5c1.7 1.7 7.3 1.7 9 0"/></svg></div>'+
+   '<h3>مرحباً <span class="grad">يا فاتح</span> 👋</h3>'+
+   '<p>أنا <b>FATY</b>، مساعدك الذكي المجاني</p>'+
+   '<p class="sm">اسألني أي شيء • تحدث معي بالميكروفون 🎤 • ارفع صورة 📎 • ولّد صوراً مذهلة ✨</p>'+
+   '<div class="chips">'+ch+'</div>'+
+   '<button class="btn-p" style="max-width:260px" onclick="openGen()">✨ افتح مولّد الصور</button>'+
+   '<div style="margin-top:22px;font-size:11px;color:#707070">مدعوم بتقنية <span class="grad">FATYAK</span> • واجهة Ubuntu</div></div>';
+  return;
+ }
+ var h='<div class="wrap">';
+ c.msgs.forEach(function(x,i){
+  var me=x.r==="u";
+  h+='<div class="row'+(me?" me":"")+'">'+(me?AV_U:AV_F)+'<div class="col">'+
+     '<div class="nm">'+(me?"فاتح <i>أنت</i>":"FATY <i>المساعد</i>")+'</div>'+
+     '<div class="bub '+(me?"m":"b")+'">'+esc(x.c);
+  if(x.img)h+='<img src="'+esc(x.img)+'" onclick="zoom(this.src)" alt="">';
+  if(x.gen)h+='<br><a class="dl" href="'+esc(x.img)+'" download="faty-'+i+'.jpg" target="_blank">⬇ تحميل الصورة</a>';
+  h+='</div><div class="acts">'+(me?"":'<button onclick="sayIdx('+i+')" title="استمع">🔊</button>')+
+     '<button onclick="cpy('+i+')" title="نسخ">⧉</button></div></div></div>';
+ });
+ if(S.busy)h+='<div class="row">'+AV_F+'<div class="col"><div class="bub b"><span class="typ"><i></i><i></i><i></i></span></div></div></div>';
+ h+='</div>';
+ m.innerHTML=h;m.scrollTop=m.scrollHeight;
+}
+function renderAll(){renderList();renderMsgs()}
+function quick(b){$("ta").value=b.getAttribute("data-t");$("ta").focus()}
+function zoom(s){$("lbImg").src=s;$("lb").classList.add("show")}
+function cpy(i){var t=cur().msgs[i].c;if(navigator.clipboard)navigator.clipboard.writeText(t)}
+function sayIdx(i){say(cur().msgs[i].c)}
+function setStatus(t){$("status").textContent=t}
+function showErr(t){$("errT").textContent=t;$("err").style.display="flex"}
+function hideErr(){$("err").style.display="none"}
+
+function history(){
+ var m=cur().msgs.slice(-10),out=[];
+ m.forEach(function(x){if(!x.gen)out.push({role:x.r==="u"?"user":"assistant",content:x.c})});
+ return out;
+}
+function ask(text){
+ var body={model:"openai",messages:[{role:"system",content:SYS}].concat(history(),[{role:"user",content:text}]),temperature:.75,max_tokens:600};
+ return fetch(TXT+"/openai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+  .then(function(r){if(!r.ok)throw 0;return r.json()})
+  .then(function(j){
+    var t=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
+    if(!t)throw 0;return t.trim();
+  })
+  .catch(function(){
+    var q=encodeURIComponent(SYS+"\n\nفاتح يقول: "+text+"\n\nFATY يرد:");
+    return fetch(TXT+"/"+q+"?model=openai").then(function(r){return r.text()})
+      .then(function(t){return (t||"").trim()||"نعم يا فاتح، أنا معك! أعد صياغة سؤالك من فضلك."})
+      .catch(function(){return "عذراً يا فاتح، تعذّر الاتصال بالخادم. تحقق من الإنترنت وحاول مجدداً. 🔌"});
+  });
+}
+
+var DICT={"قطة":"cat","قط":"cat","كلب":"dog","أسد":"lion","حصان":"horse","طائر":"bird","سمكة":"fish",
+"سيارة":"car","مدينة":"city","غابة":"forest","بحر":"ocean","شاطئ":"beach","سماء":"sky","جبل":"mountain",
+"صحراء":"desert","شمس":"sun","قمر":"moon","نجوم":"stars","وردة":"rose","زهرة":"flower","شجرة":"tree",
+"بيت":"house","منزل":"home","قصر":"palace","مسجد":"mosque","شارع":"street","فتاة":"girl","ولد":"boy",
+"رجل":"man","امرأة":"woman","طفل":"child","جميل":"beautiful","جميلة":"beautiful","رائع":"amazing",
+"أبيض":"white","أسود":"black","أحمر":"red","أزرق":"blue","أخضر":"green","ذهبي":"golden","روبوت":"robot",
+"مستقبلي":"futuristic","فضاء":"space","كوكب":"planet","صاروخ":"rocket","طبيعة":"nature","ثلج":"snow",
+"مطر":"rain","غروب":"sunset","شروق":"sunrise","ليل":"night","نهار":"day","قهوة":"coffee","طعام":"food"};
+
+function toEn(p){
+ var s=p;
+ for(var k in DICT)s=s.split(k).join(DICT[k]);
+ return s+", high quality, highly detailed, 8k, cinematic lighting, professional";
+}
+function imgURL(p,w,h){
+ return IMG+"/"+encodeURIComponent(toEn(p))+"?width="+((w||1024)+"")+"&height="+((h||1024)+"")+
+  "&model=flux&nologo=true&enhance=true&seed="+(Math.random()*1e6|0);
+}
+
+var IMGWORDS=["صورة","صور","ارسم","ارسم لي","أرسم","ولّد","ولد لي","توليد","اصنع صورة","أنشئ صورة","generate image","draw","picture of"];
+function wantsImage(t){var l=t.toLowerCase();for(var i=0;i<IMGWORDS.length;i++)if(l.indexOf(IMGWORDS[i])>-1)return true;return false}
+function cleanPrompt(t){
+ return t.replace(/من فضلك|لو سمحت|هل يمكنك|ممكن|أريد|اريد|أرجو|اصنع لي|اصنع|أنشئ|انشئ|ارسم لي|أرسم لي|ارسم|أرسم|ولّد لي|ولد لي|ولّد|ولد|توليد|صورة عن|صورة ل|صورة|صور لي|صور|لي|يا فاتي|فاتي/g,"").trim()||t;
+}
+function isCall(t){
+ var l=t.trim().toLowerCase().replace(/[؟?!.،]/g,"");
+ return (l==="فاتي"||l==="يا فاتي"||l==="faty"||l==="hey faty"||l==="مرحبا فاتي"||l==="السلام عليكم فاتي");
+}
+
+function push(r,c,extra){
+ var o={r:r,c:c};if(extra){for(var k in extra)o[k]=extra[k]}
+ var cv=cur();cv.msgs.push(o);cv.t=Date.now();
+ if(cv.msgs.length===1)cv.title=c.substring(0,34)||"محادثة";
+ save();renderAll();
+}
+
+function send(txt){
+ var t=(txt!==undefined?txt:$("ta").value).trim();
+ if((!t&&!S.img)||S.busy)return;
+ hideErr();stopSay();
+ $("ta").value="";$("ta").style.height="auto";
+ var hadImg=S.img;
+ push("u",t||"ما هذه الصورة؟",hadImg?{img:hadImg}:null);
+ clearPv();
+ S.busy=true;setStatus("يفكّر...");renderMsgs();
+ var done=function(){S.busy=false;setStatus("جاهز للمساعدة يا فاتح");renderAll()};
+
+ if(isCall(t)){
+  setTimeout(function(){done();var g="نعم يا فاتح، أنا هنا! 😊 كيف أقدر أساعدك؟";push("b",g);if(S.auto)say(g)},550);
+  return;
+ }
+ if(!hadImg&&wantsImage(t)){
+  var p=cleanPrompt(t);
+  setStatus("يرسم الصورة...");
+  var u=imgURL(p,1024,1024);
+  var pre=new Image();
+  pre.onload=function(){done();push("b","تفضّل يا فاتح، هذه صورة: «"+p+"» ✨",{img:u,gen:1});if(S.auto)say("تفضل يا فاتح، جهزت لك الصورة")};
+  pre.onerror=function(){done();push("b","عذراً يا فاتح، تعذّر توليد الصورة. جرّب وصفاً آخر. 🎨")};
+  pre.src=u;
+  return;
+ }
+ var q=hadImg?("المستخدم فاتح رفع صورة وسأل: "+(t||"صف لي هذه الصورة")+". أجبه بالعربية بشكل مفيد، واطلب منه وصفاً مختصراً للصورة إن احتجت تفاصيل أدق."):t;
+ ask(q).then(function(a){done();push("b",a);if(S.auto)say(a)})
+       .catch(function(){done();push("b","عذراً يا فاتح، حدث خطأ. حاول مجدداً.")});
+}
+
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function toggleMic(){
+ if(S.listening){try{S.rec.stop()}catch(e){}return}
+ if(!SR){showErr("متصفحك لا يدعم الميكروفون. استخدم Chrome أو Edge على رابط https.");return}
+ if(location.protocol==="file:"){showErr("الميكروفون يحتاج https أو localhost — لا يعمل بفتح الملف مباشرة.");return}
+ hideErr();
+ var r=new SR();S.rec=r;
+ r.lang="ar-SA";r.continuous=false;r.interimResults=true;r.maxAlternatives=1;
+ var fin="";
+ r.onstart=function(){S.listening=true;$("mic").classList.add("rec");$("micB").style.display="flex";setStatus("🎤 يستمع...")};
+ r.onresult=function(e){
+  var itm="";
+  for(var i=e.resultIndex;i<e.results.length;i++){
+   if(e.results[i].isFinal)fin+=e.results[i][0].transcript;else itm+=e.results[i][0].transcript}
+  $("ta").value=fin||itm;
+ };
+ r.onerror=function(e){
+  var m={"no-speech":"لم أسمعك يا فاتح، حاول مجدداً.","not-allowed":"يجب السماح بالوصول إلى الميكروفون من إعدادات المتصفح.","audio-capture":"لا يوجد ميكروفون متاح.","network":"خطأ في الشبكة."};
+  showErr(m[e.error]||"خطأ في التعرف على الصوت: "+e.error);
+ };
+ r.onend=function(){
+  S.listening=false;$("mic").classList.remove("rec");$("micB").style.display="none";setStatus("جاهز للمساعدة يا فاتح");
+  var v=$("ta").value.trim();if(v)setTimeout(function(){send(v)},250);
+ };
+ try{r.start()}catch(e){showErr("تعذّر تشغيل الميكروفون.")}
+}
+
+function arVoice(){
+ var v=speechSynthesis.getVoices(),i;
+ for(i=0;i<v.length;i++)if(v[i].lang==="ar-SA")return v[i];
+ for(i=0;i<v.length;i++)if(v[i].lang.indexOf("ar")===0)return v[i];
+ return null;
+}
+function say(t){
+ if(!("speechSynthesis" in window))return;
+ var c=String(t).replace(/```[\s\S]*?```/g," ").replace(/[*_`#>\[\]()]/g," ").replace(/\s+/g," ").trim();
+ if(!c)return;
+ speechSynthesis.cancel();
+ var u=new SpeechSynthesisUtterance(c.substring(0,600));
+ u.lang="ar-SA";u.rate=1;u.pitch=1;u.volume=1;
+ var v=arVoice();if(v)u.voice=v;
+ u.onstart=function(){S.speaking=true;setStatus("🔊 يتكلم...")};
+ u.onend=u.onerror=function(){S.speaking=false;setStatus("جاهز للمساعدة يا فاتح")};
+ speechSynthesis.speak(u);
+}
+function stopSay(){if("speechSynthesis" in window)speechSynthesis.cancel();S.speaking=false}
+function toggleSpeak(){
+ S.auto=!S.auto;$("spk").classList.toggle("act",S.auto);
+ $("spk").textContent=S.auto?"🔊":"🔇";
+ if(!S.auto)stopSay();
+}
+if("speechSynthesis" in window)speechSynthesis.onvoiceschanged=function(){};
+
+$("file").onchange=function(e){
+ var f=e.target.files[0];if(!f)return;
+ if(f.size>5e6){showErr("الصورة كبيرة جداً (الحد 5 ميجابايت).");return}
+ var rd=new FileReader();
+ rd.onload=function(ev){S.img=ev.target.result;
+  $("pvWrap").innerHTML='<div class="pv"><img src="'+S.img+'" alt=""><button onclick="clearPv()">✕</button></div>';
+  $("ta").focus()};
+ rd.readAsDataURL(f);e.target.value="";
+};
+function clearPv(){S.img=null;$("pvWrap").innerHTML=""}
+
+document.addEventListener("paste",function(e){
+ var it=e.clipboardData&&e.clipboardData.items;if(!it)return;
+ for(var i=0;i<it.length;i++)if(it[i].type.indexOf("image")===0){
+  var f=it[i].getAsFile(),rd=new FileReader();
+  rd.onload=function(ev){S.img=ev.target.result;
+   $("pvWrap").innerHTML='<div class="pv"><img src="'+S.img+'" alt=""><button onclick="clearPv()">✕</button></div>'}};
+  rd.readAsDataURL(f);e.preventDefault();return;
+ }
+});
+
+var RATIOS=[["مربع",1024,1024],["أفقي",1280,720],["عمودي",720,1280],["عريض",1024,768]];
+var R=0;
+var IDEAS=["قطة لطيفة في حديقة","مدينة مستقبلية بأضواء نيون","جبل مع غروب الشمس","سيارة رياضية حمراء",
+"رائد فضاء بين النجوم","غابة سحرية ملوّنة","حصان أبيض على الشاطئ","مسجد قديم وقت المغرب"];
+
+function buildGen(){
+ var h="";RATIOS.forEach(function(r,i){h+='<button class="rb'+(i===R?' on':'')+'" onclick="setR('+i+')">'+r[0]+'</button>'});
+ $("ratios").innerHTML=h;
+ h="";IDEAS.forEach(function(x){h+='<button class="idea" onclick="ip.value=this.textContent">'+x+'</button>'});
+ $("ideas").innerHTML=h;
+}
+function setR(i){R=i;buildGen()}
+function openGen(){$("gen").classList.add("show");closeSb();setTimeout(function(){$("ip").focus()},90)}
+function closeGen(){$("gen").classList.remove("show")}
+$("gen").onclick=function(e){if(e.target===this)closeGen()};
+
+function doGen(){
+ var p=$("ip").value.trim();if(!p)return;
+ var b=$("genBtn");b.disabled=true;b.innerHTML='<span class="spin"></span> جاري التوليد...';
+ $("out").innerHTML='<div style="text-align:center;color:var(--mut);font-size:13px;padding:14px">⏳ قد يستغرق 10–20 ثانية...</div>';
+ var u=imgURL(p,RATIOS[R][1],RATIOS[R][2]);
+ var im=new Image();
+ im.onload=function(){
+  b.disabled=false;b.innerHTML="✨ ولّد الصورة";
+  $("out").innerHTML='<img src="'+u+'" onclick="zoom(this.src)" alt="">'+
+   '<div style="display:flex;gap:8px;margin-top:9px">'+
+   '<a class="btn-p" style="text-decoration:none;text-align:center" href="'+u+'" download="faty.jpg" target="_blank">⬇ تحميل</a>'+
+   '<button class="btn-p" onclick="toChat(\''+encodeURIComponent(p)+'\',\''+u.replace(/'/g,"")+'\')">💬 أضف للمحادثة</button></div>';
+ };
+ im.onerror=function(){b.disabled=false;b.innerHTML="✨ ولّد الصورة";
+  $("out").innerHTML='<div style="color:#fca5a5;font-size:13px;text-align:center;padding:12px">تعذّر توليد الصورة، حاول مجدداً.</div>'};
+ im.src=u;
+}
+function toChat(p,u){closeGen();push("b","✨ صورة بناءً على طلبك يا فاتح: «"+decodeURIComponent(p)+"»",{img:u,gen:1})}
+
+function toggleSb(){$("sb").classList.toggle("open");$("ov").classList.toggle("show")}
+function closeSb(){$("sb").classList.remove("open");$("ov").classList.remove("show")}
+$("ov").onclick=closeSb;$("closeSb").onclick=closeSb;
+
+var ta=$("ta");
+ta.addEventListener("input",function(){this.style.height="auto";this.style.height=Math.min(this.scrollHeight,140)+"px"});
+ta.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeGen();$("lb").classList.remove("show")}});
+
+load();buildGen();renderAll();
+if(!SR)setTimeout(function(){setStatus("جاهز • (الميكروفون يعمل على Chrome/Edge)")},900);
+console.log("%cFATY by FATYAK","background:#E95420;color:#fff;padding:4px 10px;border-radius:4px;font-weight:bold");
+</script>
+</body>
+</html>
